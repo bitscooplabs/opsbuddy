@@ -1,0 +1,31 @@
+{
+  "version": "1.0",
+
+  "name": "StatusCake Alerts (BitScoop Alexa Demo)",
+  "url": "https://app.statuscake.com",
+
+  "headers": {
+    "API": "{{ parameters.api_key }}",
+    "Username": "{{ parameters.username }}"
+  },
+
+  "endpoints": {
+    "Alerts": {
+      "GET": {
+        "method": "GET",
+        "route": {
+          "data": "items",
+          "path": "/API/Alerts"
+        },
+        "parameters": {
+          "TestID": {
+            "value": "{{ parameters.test_id }}"
+          },
+          "Since": {
+            "value": "{{ parameters.since }}"
+          }
+        }
+      }
+    }
+  }
+}

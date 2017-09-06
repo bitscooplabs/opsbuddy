@@ -1,0 +1,132 @@
+@import 'theme.less';
+
+@import 'mixins/boxed-group.less';
+@import 'mixins/code.less';
+@import 'mixins/colors.less';
+@import 'mixins/controls.less';
+@import 'mixins/flexbox.less';
+@import 'mixins/fonts.less';
+@import 'mixins/layout.less';
+@import 'mixins/media.less';
+@import 'mixins/mixins.less';
+@import 'mixins/paragraphing.less';
+
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	height: 100%;
+
+	.roboto(300);
+	font-size: 10px;
+
+	color: @font-color;
+}
+
+body {
+	.flexbox;
+	.flex-column;
+
+	text-rendering: optimizeLegibility;
+	font-size: 1.6rem;
+	padding: 0; margin: 0;
+	min-height: 100%;
+	overflow-y: auto;
+
+	@media @mobile, @maxwidth768 {
+		.hide-mobile {
+			display: none !important;
+		}
+	}
+}
+
+pre {
+	.roboto(300);
+
+	margin: 0;
+}
+
+a {
+	.interactive;
+
+	text-decoration: none;
+	color: @blue;
+	outline: none;
+}
+
+::selection {
+	text-shadow: none;
+	color: @highlight-color !important;
+	background-color: @highlight-background;
+}
+
+.header {
+	@media @mobile, @maxwidth768 {
+		font-size: 30px;
+	}
+
+	h1 {
+		margin-top: 1em;
+	}
+
+	h3 {
+		margin-top: 0.5em;
+	}
+
+	.instructions {
+		margin-bottom: 0.5em;
+		max-width: 600px;
+	}
+
+	.logout {
+		width: 300px;
+		margin: 1em 0 0 0;
+	}
+
+	.delete {
+		width: 300px;
+		margin: 1em 0;
+	}
+
+	button {
+		width: 200px;
+
+		@media @mobile, @maxwidth768 {
+			width: 400px;
+		}
+
+		&.google-create {
+			background-color: #6CC644;
+			color: white;
+		}
+
+		&.google-delete {
+			background-color: #BD2C00;
+			color: white;
+		}
+	}
+}
+
+.title {
+	font-size: 2em;
+	font-weight: bold;
+}
+
+div.service {
+	margin-top: 1em;
+	width: 300px;
+
+	form {
+		button[type="submit"] {
+			margin: 0.3em 0;
+		}
+	}
+}
+
+.logins {
+	button {
+		margin-bottom: 1em;
+	}
+}

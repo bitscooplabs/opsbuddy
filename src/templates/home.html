@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8"/>
+
+		<title>Alexa Ops Buddy &middot; powered by BitScoop</title>
+
+		<meta name="description" content="Ops Buddy Demo" />
+
+		<!-- RequireJS configuration -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+		<script type="text/javascript" src="https://s3.amazonaws.com/alexa-2-demo/static/js/site.min.js" ></script>
+
+		<!-- External fonts -->
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand:400|Roboto:300,400,700|Open+Sans:200,300,400,700|Source+Sans+Pro:300,400,700" />
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+		<link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/opsbuddy/css/site.min.css" />
+
+		<script type="text/javascript">
+			'use strict';
+
+			$(document).ready(function() {
+				$(document).on('change', 'input[type="checkbox"]', function(e) {
+					e.preventDefault();
+
+					let $this = $(this);
+
+					let $form = $this.closest('form');
+					let service = $form.data('service');
+					let name = $this.attr('name');
+
+					let data = {
+						[name]: $this.get(0).checked
+					};
+
+					$.ajax({
+						url: $form.attr('action'),
+						method: $form.attr('method'),
+						'content-type': 'application/json',
+						dataType: 'text',
+						data: JSON.stringify(data)
+					}).done(function(data, xhr, response) {
+						$('i.success-icon[data-for="' + service + '"]').addClass('shown');
+
+						setTimeout(function() {
+							$('i.success-icon[data-for="' + service + '"]').removeClass('shown');
+						}, 1000);
+					}).fail(function(data, xhr, response) {
+						console.log(data);
+					});
+				});
+
+				$(document).on('click', 'button.google-delete', function(e) {
+					$.ajax({
+						url: '/prod/connections',
+						method: 'DELETE'
+					}).done(function(data, xhr, response) {
+						$('button.google-delete').remove();
+						$('div.service.google').append('<a href="/prod/connections"><button class="google-create">Create Google Connection</button></a>');
+
+						$('i.success-icon[data-for="google"]').addClass('shown');
+
+						setTimeout(function() {
+							$('i.success-icon[data-for="google"]').removeClass('shown');
+						}, 1000);
+					}).fail(function(data, xhr, response) {
+						console.log(data);
+					});
+				});
+
+				$(document).on('submit', function(e) {
+					e.preventDefault();
+
+					let $form = $(e.target);
+					let service = $form.data('service');
+					let serialized = {};
+
+					$form.serializeArray().map(function(d) {
+						serialized[d.name] = d.value === 'on' ? true : d.value;
+					});
+
+					$.ajax({
+						url: $form.attr('action'),
+						type: $form.attr('method'),
+						'content-type': 'application/json',
+						dataType: 'text',
+						data: JSON.stringify(serialized)
+					}).done(function(data, xhr, response) {
+						$('i.success-icon[data-for="' + service + '"]').addClass('shown');
+
+						setTimeout(function() {
+							$('i.success-icon[data-for="' + service + '"]').removeClass('shown');
+						}, 1000);
+					}).fail(function(data, xhr, response) {
+						console.log(data);
+					});
+
+					return false;
+				});
+
+				$(document).on('click', 'div.delete > button', function(e) {
+					$.ajax({
+						url: '/prod/users',
+						type: 'DELETE',
+						'content-type': 'application/json'
+					}).done(function(data, xhr, response) {
+						window.location.href = '/prod';
+					}).fail(function(data, xhr, response) {
+						console.log(data);
+					});
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="header flexbox flex-column flex-x-center">
+			<h1>BitScoop Ops Buddy</h1>
+
+			<div class="instructions">
+				This demo allows you to ask a related Alexa skill to get information about your software stack from GitHub, Google Analytics, Postman, and/or StatusCake.
+			</div>
+
+			{% if user %}
+				<div class="instructions">
+					Now that you're signed in, you should enable and configure the services from which you want to retrieve data.
+					If you are retrieving Google Analytics data, you must click the 'Create Connection' button and follow the workflow.
+					The Google account you use for this Connection can be different than the one you used to create your OpsBuddy account.
+				</div>
+			{% else %}
+				<div class="instructions">
+					You must first sign up for an account here using a Google account, and once signed in enable and configure the services from which you want to retrieve data.
+				</div>
+			{% endif %}
+
+			<div class="instructions">
+				You will then need to install the Alexa skill 'BitScoop Ops Buddy' and link it with the same Google account you used to sign up for your Ops Buddy account.
+				After that, you will be able to ask Alexa 'Ask OpsBuddy how the stack is doing', and it will retrieve the requested data and read it back to you.
+			</div>
+
+			{% if user %}
+				<div class="github service flexbox flex-column">
+					<div class="title">
+						GitHub
+						<i class="fa fa-check-circle success-icon" data-for="github"></i>
+						<div class="errorlist" data-for="github"></div>
+					</div>
+					<form action="/prod/users" method="PATCH" data-service="github">
+						<label class="flexbox flex-x-center">
+							<input type="checkbox" name="githubEnabled" id="github-enable" {% if user.githubEnabled %}checked {% endif %}>
+							<span>Enabled</span>
+						</label>
+						<div>
+							<div>Repo's Name</div>
+							<input type="text" name="githubRepo" placeholder="Repo's name" value="{{ user.githubRepo }}">
+						</div>
+						<div>
+							<div>Repo Owner's Name</div>
+							<input type="text" name="githubUser" placeholder="Repo owner's name" value="{{ user.githubUser }}">
+						</div>
+						<button type="submit">Update GitHub</button>
+					</form>
+				</div>
+
+				<div class="google service flexbox flex-column">
+					<div class="title">
+						Google Analytics
+						<i class="fa fa-check-circle success-icon" data-for="google"></i>
+						<div class="errorlist" data-for="google"></div>
+					</div>
+					<form action="/prod/users" method="PATCH" data-service="google">
+						<label class="flexbox flex-x-center">
+							<input type="checkbox" name="googleEnabled" id="google-enable" {% if user.googleEnabled %}checked {% endif %}>
+							<span>Enabled</span>
+						</label>
+						<div>
+							<div>View ID</div>
+							<input type="text" name="googleViewId" placeholder="View ID" value="{{ user.googleViewId }}">
+						</div>
+						<button type="submit">Update Google</button>
+					</form>
+
+					{% if user.googleAnalyticsConnectionId %}
+						<button class="google-delete">Delete Google Connection</button>
+					{% else %}
+					<a href="/prod/connections">
+						<button class="google-create">Create Google Connection</button>
+					</a>
+					{% endif %}
+				</div>
+
+				<div class="postman service flexbox flex-column">
+					<div class="title">
+						Postman
+						<i class="fa fa-check-circle success-icon" data-for="postman"></i>
+						<div class="errorlist" data-for="postman"></div>
+					</div>
+					<form action="/prod/users" method="PATCH" data-service="postman">
+						<label class="flexbox flex-x-center">
+							<input type="checkbox" name="postmanEnabled" id="postman-enable" {% if user.postmanEnabled %}checked {% endif %}>
+							<span>Enabled</span>
+						</label>
+						<div>
+							<div>Postman Monitor ID</div>
+							<input type="text" name="postmanId" placeholder="Postman Monitor ID" value="{{ user.postmanId }}">
+							<div>Postman API Key</div>
+							<input type="text" name="postmanApiKey" placeholder="Postman API Key" value="{{ user.postmanApiKey }}">
+						</div>
+						<button type="submit">Update Postman</button>
+					</form>
+				</div>
+
+				<div class="statuscake service flexbox flex-column">
+					<div class="title">
+						StatusCake
+						<i class="fa fa-check-circle success-icon" data-for="statuscake"></i>
+						<div class="errorlist" data-for="statuscake"></div>
+					</div>
+					<form action="/prod/users" method="PATCH" data-service="statuscake">
+						<label class="flexbox flex-x-center">
+							<input type="checkbox" name="statuscakeEnabled" id="statuscake-enable" {% if user.statuscakeEnabled %}checked {% endif %}>
+							<span>Enabled</span>
+						</label>
+						<div>
+							<div>Statuscake Test ID</div>
+							<input type="text" name="statuscakeId" placeholder="Statuscake Test ID" value="{{ user.statuscakeId }}">
+							<div>Statuscake Api Key</div>
+							<input type="text" name="statuscakeApiKey" placeholder="Statuscake API Key" value="{{ user.statuscakeApiKey }}">
+							<div>Statuscake Username</div>
+							<input type="text" name="statuscakeUsername" placeholder="Statuscake Username" value="{{ user.statuscakeUsername }}">
+						</div>
+						<button type="submit">Update StatusCake</button>
+					</form>
+				</div>
+
+				<div class="logout">
+					<a href="/prod/logout"><button><i class="fa fa-sign-out"></i> <span>Log out</span></button></a>
+				</div>
+
+				<div class="delete">
+					<button><i class="fa fa-trash"></i> <span>Delete account</span></button>
+				</div>
+			{% else %}
+				<h3>Sign up or log in below.</h3>
+
+				<div class="logins flexbox flex-column flex-x-center">
+					<a href="/prod/login?service=google"><button><i class="fa fa-google"></i> <span>Log In with Google</span></button></a>
+					<a href="/prod/signup?service=google"><button><i class="fa fa-google"></i> <span>Sign Up with Google</span></button></a>
+				</div>
+			{% endif %}
+		</div>
+	</body>
+</html>
