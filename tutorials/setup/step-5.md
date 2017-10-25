@@ -53,13 +53,19 @@ Click on Interaction Model on the left-hand side. Under Intent Schema enter:
 {
   "intents": [
     {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
       "intent": "AboutIntent"
     },
     {
       "intent": "StackIntent"
-    },
-    {
-      "intent": "LoginIntent"
     }
   ]
 }
@@ -69,10 +75,9 @@ and under Sample Utterances enter:
 
 ```
 StackIntent how's the stack doing
-
 StackIntent how is the stack doing
-
 StackIntent how is the stack doing today
+StackIntent tell me how the stack is doing
 ```
 
 You can add more utterances if you wish; the key thing is that they must start with ‘StackIntent’ to call the right Intent in the Lambda function.
@@ -82,7 +87,7 @@ Next click on Configuration.
 Service Endpoint Type should be ‘AWS Lambda ARN’.
 Paste the ARN from the end of Step 3 into the 'Default' text box right under the endpoint type.
 Select 'Yes' under Account Linking, after which a number of fields will appear.
-For Authorization URL, enter 'https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force'.
+For Authorization URL, enter the Invoke URL followed by '/alexa-login', e.g. 'https://abcd1234.execute-api.us-east-1.amazonaws.com/prod/alexa-login'.
 Client ID should be the public key you generated for Google.
 Add a domain for Domain List and make it 'google.com'.
 Add two scopes, which should be 'https://www.googleapis.com/auth/userinfo.email' and 'https://www.googleapis.com/auth/userinfo.profile'.
@@ -108,20 +113,13 @@ Check Export Compliance and select No for the advertising question.
 For the Privacy Policy URL you can enter 'https://bitscoop.com/privacy'.
 Finally, save this.
 
+### Enable and run in Test mode
+The rest of these instructions assume you will not publish your copy, but just want to run it in test mode.
+
 At this point, you should see the 'Skills Beta Testing' box on the left change and a button to 'Beta Test Your Skill'.
 This means that all necessary information has been entered and you can now run the app.
 Click on this button, then enter some emails of testers and click 'Update Testers'.
 Finally click 'Start test' in the bottom right.
 You should be taken to a page with an Invite URL.
 
-### Sign in with an Alexa product
-[Sign in to Alexa account](alexa.amazon.com) with an email that was provided under the Skills Beta testing.
-Next, follow the Invite URL to add that skill to your account
-(If you are using the publicly-hosted copy, just search for the skill 'BitScoop Ops Buddy' and install it instead of following any Invite URL).
-You should be taken to the page for that skill, but if not go to Skills, then click on 'Your Skills', then select the new skill.
-Click on Enable, then click on 'Link Account' when that appears.
-Sign in with the same Google account you used to sign up with the front-end app.
-If all has succeeded, you should see a page saying the skill was successfully linked.
-
-You should now be able to ask any Alexa device 'Ask <skill invocation name> how's the stack doing', and it should return information from whatever services you enabled and configured properly in the front-end app.
-[EchoSim](https://echosim.io/) is a handy Alexa tester if you do not have another device available.
+For instructions on how to enable and link this skill, see the instructions in the [configure](../configure) tutorial.

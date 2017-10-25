@@ -105,10 +105,6 @@ Go to the Lambda function we created earlier, click on the Code tab, then for �
 Click on the Upload button that appears next to ‘Function package’ and select the .zip file in the /dist folder.
 Make sure to Save the function.
 
-### Create and Configure account
-If all has gone well, you should be able to hit the Invoke URL and see a page asking you to log in or sign up (if you are using the publicly-hosted copy, just go to www.opsbuddy.bitscoop.com).
-If you click the sign up button, you should be redirected to a prompt from Google authorizing the application that was created to have access to your public info.
-After authorization, you should be redirected back to the homepage, where you now have an account with the demo project.
-From here you can set the credentials and settings for the four services as well as create a Connection to Google for signing the Google Analytics calls.
-The Connection you create can be with a different Google account than you used to sign up for the Ops Buddy account, but it must have access to the Google Analytics data you want to retrieve.
-If you log out, then click log in, you should be automatically logged back in, though if you have more than one Google account you will have to click on the one you want to use for the login.
+If all has gone well, you should be able to hit the Invoke URL and see a page asking you to log in or sign up.
+Instructions on what to do on this page found in the [configure](../configure) tutorial.
+There is one more major step involved in setting up your own copy, and that involves setting up the Alexa skill.
