@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8"/>
+
+		<title>Alexa Ops Buddy &middot; powered by BitScoop</title>
+
+		<meta name="description" content="Ops Buddy Demo" />
+
+		<!-- RequireJS configuration -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+		<script type="text/javascript" src="https://s3.amazonaws.com/alexa-2-demo/static/js/site.min.js" ></script>
+
+		<!-- External fonts -->
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand:400|Roboto:300,400,700|Open+Sans:200,300,400,700|Source+Sans+Pro:300,400,700" />
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+		<link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/opsbuddy/css/site.min.css" />
+	</head>
+
+	<body>
+		<div class="header flexbox flex-column flex-x-center">
+			<h1>BitScoop Ops Buddy</h1>
+
+			<div class="instructions">
+				To use this skill, you must sign in with the same Google account you used to create your account at opsbuddy.bitscoop.com.
+			</div>
+
+			<div class="logins flexbox flex-column flex-x-center">
+				<a href="https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&scope={{ scope }}&client_id={{ client_id }}&response_type={{ response_type }}&state={{ state }}&redirect_uri={{ redirect_uri }}"><button><i class="fa fa-google"></i> <span>Sign In with Google</span></button></a>
+			</div>
+		</div>
+	</body>
+</html>

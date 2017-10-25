@@ -32,6 +32,9 @@ exports.handler = function(event, context, callback) {
 			views.connections.delete(event, context, callback);
 		}
 	}
+	else if (path === '/alexa-login') {
+		views.alexaLogin(event, context, callback);
+	}
 	else if (path === '/login') {
 		views.login(event, context, callback);
 	}

@@ -52,7 +52,7 @@ Select the ‘/’ resource, then click the Actions dropdown and select ‘Creat
 Enter ‘complete-login’ for the Resource Name, and the Resource Path should be filled in with this automatically as well, which is what we want.
 Leave the checkboxes unchecked and click the Create Resource button.
 When that’s been created, click on the ‘/complete-login’ resource and follow the steps above for adding a GET method to that resource.
-Repeat this process for the resources 'complete-service', 'connections', 'login', 'logout', 'signup', and 'users'.
+Repeat this process for the resources 'alexa-login', 'complete-service', 'connections', 'login', 'logout', 'signup', and 'users'.
 '/connections' needs a 'DELETE' method in additional to its 'GET', and '/users' does not need a 'GET' method but does need a 'DELETE' and 'PATCH' methods.
 All of the others just need a 'GET'.
 

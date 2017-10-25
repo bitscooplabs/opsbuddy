@@ -2,8 +2,9 @@
 
 
 module.exports = {
-	completeLogin: require('./complete_login'),
-	completeService: require('./complete_service'),
+	alexaLogin: require('./alexa-login'),
+	completeLogin: require('./complete-login'),
+	completeService: require('./complete-service'),
 	connections: require('./connections'),
 	home: require('./home'),
 	login: require('./login'),
