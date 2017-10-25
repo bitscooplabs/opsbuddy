@@ -5,8 +5,6 @@ const assert = require('assert');
 const Sequelize = require('sequelize');
 const _ = require('lodash');
 
-const Users = require('../models/sql/users');
-
 
 module.exports = function(event, context, callback) {
 	let sequelize, users;
@@ -34,9 +32,12 @@ module.exports = function(event, context, callback) {
 				logging: false
 			});
 
-			users = new Users(sequelize);
+			return require('../models/sql/users')(sequelize)
+				.then(function(model) {
+					users = model;
 
-			return Promise.resolve();
+					return Promise.resolve();
+				});
 		})
 		.then(function() {
 			return bitscoop.getConnection(query.existing_connection_id || query.connection_id)

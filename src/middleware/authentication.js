@@ -1,15 +1,14 @@
 'use strict';
 
-const Sessions = require('../models/sql/sessions');
-const Users = require('../models/sql/users');
-
 
 module.exports = function(sequelize, cookie) {
-	let sessions = new Sessions(sequelize);
-	let users = new Users(sequelize);
+	return Promise.all([
+		require('../models/sql/sessions')(sequelize),
+		require('../models/sql/users')(sequelize)
+	])
+		.then(function(models) {
+			let [sessions, users] = models;
 
-	return Promise.resolve()
-		.then(function() {
 			return sessions.findOne({
 				where: {
 					token: cookie

@@ -8,7 +8,7 @@ const cookie = require('cookie');
 
 
 module.exports = function(event, context, callback) {
-	let sequelize;
+	let sequelize, sessions;
 
 	let cookies = _.get(event, 'headers.Cookie', '');
 	let sessionId = cookie.parse(cookies).social_demo_session_id;
@@ -32,25 +32,14 @@ module.exports = function(event, context, callback) {
 				logging: false
 			});
 
-			return Promise.resolve();
+			return require('../models/sql/sessions')(sequelize)
+				.then(function(model) {
+					sessions = model;
+
+					return Promise.resolve();
+				});
 		})
 		.then(function() {
-			let sessions = sequelize.define('session', {
-				id: {
-					type: Sequelize.INTEGER,
-					primaryKey: true,
-					autoIncrement: true
-				},
-				user: {
-					type: Sequelize.INTEGER
-				},
-				token: {
-					type: Sequelize.STRING
-				}
-			}, {
-				timestamps: false
-			});
-
 			return sessions.sync()
 				.then(function() {
 					return sessions.destroy({

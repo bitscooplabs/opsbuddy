@@ -8,10 +8,6 @@ const cookie = require('cookie');
 const moment = require('moment');
 const uuid = require('uuid');
 
-const AssociationSessions = require('../models/sql/association-sessions');
-const Sessions = require('../models/sql/sessions');
-const Users = require('../models/sql/users');
-
 
 module.exports = function(event, context, callback) {
 	let associationSessions, filter, promise, sequelize, sessions, users;
@@ -53,11 +49,16 @@ module.exports = function(event, context, callback) {
 					logging: false
 				});
 
-				associationSessions = new AssociationSessions(sequelize);
-				sessions = new Sessions(sequelize);
-				users = new Users(sequelize);
+				return Promise.all([
+					require('../models/sql/association-sessions')(sequelize),
+					require('../models/sql/sessions')(sequelize),
+					require('../models/sql/users')(sequelize)
+				])
+					.then(function(models) {
+						[associationSessions, sessions, users] = models;
 
-				return Promise.resolve();
+						return Promise.resolve();
+					});
 			})
 			.then(function() {
 				filter = {

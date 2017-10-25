@@ -6,8 +6,6 @@ const Sequelize = require('sequelize');
 const moment = require('moment');
 const uuid = require('uuid');
 
-const AssociationSessions = require('../models/sql/association-sessions');
-
 
 module.exports = function(event, context, callback) {
 	let associationSessions, sequelize;
@@ -31,9 +29,12 @@ module.exports = function(event, context, callback) {
 				logging: false
 			});
 
-			associationSessions = new AssociationSessions(sequelize);
+			return require('../models/sql/association-sessions')(sequelize)
+				.then(function(model) {
+					associationSessions = model;
 
-			return Promise.resolve();
+					return Promise.resolve();
+				});
 		})
 		.then(function() {
 			let mapId = process.env.GOOGLE_SIGN_IN_MAP_ID;

@@ -105,7 +105,7 @@
 					$.ajax({
 						url: '/prod/users',
 						type: 'DELETE',
-						'content-type': 'application/json'
+						dataType: 'text'
 					}).done(function(data, xhr, response) {
 						window.location.href = '/prod';
 					}).fail(function(data, xhr, response) {

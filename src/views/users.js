@@ -6,7 +6,6 @@ const Sequelize = require('sequelize');
 const _ = require('lodash');
 const cookie = require('cookie');
 
-const Users = require('../models/sql/users');
 const authenticate = require('../middleware/authentication');
 
 
@@ -32,9 +31,12 @@ function del(event, context, callback) {
 				logging: false
 			});
 
-			users = new Users(sequelize);
+			return require('../models/sql/users')(sequelize)
+				.then(function(model) {
+					users = model;
 
-			return Promise.resolve();
+					return Promise.resolve();
+				});
 		})
 		.then(function() {
 			let cookies = _.get(event, 'headers.Cookie', '');
@@ -51,10 +53,15 @@ function del(event, context, callback) {
 
 			let bitscoop = global.env.bitscoop;
 
-			return Promise.all([
-				bitscoop.deleteConnection(result.googleAnalyticsConnectionId),
-				bitscoop.deleteConnection(result.accountConnectionId)
-			]);
+			let promises = [
+				bitscoop.deleteConnection(user.accountConnectionId)
+			];
+
+			if (result.googleAnalyticsConnectionId) {
+				promises.push(bitscoop.deleteConnection(user.googleAnalyticsConnectionId));
+			}
+
+			return Promise.all(promises);
 		})
 		.then(function() {
 			return users.destroy({
@@ -114,9 +121,12 @@ function patch(event, context, callback) {
 				logging: false
 			});
 
-			users = new Users(sequelize);
+			return require('../models/sql/users')(sequelize)
+				.then(function(model) {
+					users = model;
 
-			return Promise.resolve();
+					return Promise.resolve();
+				});
 		})
 		.then(function() {
 			let cookies = _.get(event, 'headers.Cookie', '');
