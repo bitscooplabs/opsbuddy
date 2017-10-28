@@ -8,7 +8,7 @@ The Alexa Skill, after being linked with the same Google account used to sign up
 
 The [tutorials](./tutorials) folder contains instructions on configuring the skill on our publicly-hosted copy and/or setting up and configuring a copy of your own.
 
-## Qucikstart: Setup & Configure
+## Quickstart: Setup & Configure
 
 1. [Setup BitScoop & API Connections](https://github.com/bitscooplabs/opsbuddy/blob/master/tutorials/setup/step-1.md)
 2. [Install Dependencies](https://github.com/bitscooplabs/opsbuddy/blob/master/tutorials/setup/step-2.md)
