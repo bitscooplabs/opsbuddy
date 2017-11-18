@@ -55,11 +55,11 @@
 
 				$(document).on('click', 'button.google-delete', function(e) {
 					$.ajax({
-						url: '/prod/connections',
+						url: '/connections',
 						method: 'DELETE'
 					}).done(function(data, xhr, response) {
 						$('button.google-delete').remove();
-						$('div.service.google').append('<a href="/prod/connections"><button class="google-create">Create Google Connection</button></a>');
+						$('div.service.google').append('<a href="/connections"><button class="google-create">Create Google Connection</button></a>');
 
 						$('i.success-icon[data-for="google"]').addClass('shown');
 
@@ -103,14 +103,20 @@
 
 				$(document).on('click', 'div.delete > button', function(e) {
 					$.ajax({
-						url: '/prod/users',
+						url: '/users',
 						type: 'DELETE',
 						dataType: 'text'
 					}).done(function(data, xhr, response) {
-						window.location.href = '/prod';
+						window.location.href = '/';
 					}).fail(function(data, xhr, response) {
 						console.log(data);
 					});
+				});
+
+				$(document).on('click', 'div.instructions', function(e) {
+					var $this = $(this);
+
+					$this.find('.text').toggleClass('hidden');
 				});
 			});
 		</script>
@@ -127,8 +133,7 @@
 			{% if user %}
 				<div class="instructions">
 					Now that you're signed in, you should enable and configure the services from which you want to retrieve data.
-					If you are retrieving Google Analytics data, you must click the 'Create Connection' button and follow the workflow.
-					The Google account you use for this Connection can be different than the one you used to create your OpsBuddy account.
+					Click on 'Instructions' under each service for more information on where to find configuration information.
 				</div>
 			{% else %}
 				<div class="instructions">
@@ -148,7 +153,13 @@
 						<i class="fa fa-check-circle success-icon" data-for="github"></i>
 						<div class="errorlist" data-for="github"></div>
 					</div>
-					<form action="/prod/users" method="PATCH" data-service="github">
+					<div class="instructions">
+						Instructions
+						<div class="text hidden">
+							Enter the name of a public GitHub repo as well as the name of the owner.
+						</div>
+					</div>
+					<form action="/users" method="PATCH" data-service="github">
 						<label class="flexbox flex-x-center">
 							<input type="checkbox" name="githubEnabled" id="github-enable" {% if user.githubEnabled %}checked {% endif %}>
 							<span>Enabled</span>
@@ -171,7 +182,18 @@
 						<i class="fa fa-check-circle success-icon" data-for="google"></i>
 						<div class="errorlist" data-for="google"></div>
 					</div>
-					<form action="/prod/users" method="PATCH" data-service="google">
+					<div class="instructions">
+						<div>Instructions</div>
+						<div class="text hidden">
+							When signed into a Google account, go to the <a target="_blank" href="https://console.developers.google.com/apis/api/analytics.googleapis.com/overview">Google API Console for Analytics</a> and make sure Analytics is enabled.
+							Next go to <a target="_blank" href="https://analytics.google.com/analytics/web/#management/Settings/">Google Analytics Settings</a>, then select the View you want to use in the right-hand column and then ‘View Settings’ underneath that.
+							Under Basic Settings you should see the View ID; it should look like ga:123456789.
+
+							You must also click the button 'Create Google Connection' and follow the prompts that come up to give Ops Buddy permission to use Google Analytics on your behalf.
+							The Google account you use to create this Connection must have permission to read your Anaytics data.
+						</div>
+					</div>
+					<form action="/users" method="PATCH" data-service="google">
 						<label class="flexbox flex-x-center">
 							<input type="checkbox" name="googleEnabled" id="google-enable" {% if user.googleEnabled %}checked {% endif %}>
 							<span>Enabled</span>
@@ -186,7 +208,7 @@
 					{% if user.googleAnalyticsConnectionId %}
 						<button class="google-delete">Delete Google Connection</button>
 					{% else %}
-					<a href="/prod/connections">
+					<a href="/connections">
 						<button class="google-create">Create Google Connection</button>
 					</a>
 					{% endif %}
@@ -198,7 +220,16 @@
 						<i class="fa fa-check-circle success-icon" data-for="postman"></i>
 						<div class="errorlist" data-for="postman"></div>
 					</div>
-					<form action="/prod/users" method="PATCH" data-service="postman">
+					<div class="instructions">
+						<div>Instructions</div>
+						<div class="text hidden">
+							In Postman, create a Monitor for an API you wish to test, then click on the Monitor.
+							The Monitor’s ID should be the last thing in the URL path, e.g. https://[appname].postman.co/monitors/[monitor_id].
+
+							Go to 'Integrations' on the main menu, select 'Postman Pro API', and then either create a new key or use an existing one.
+						</div>
+					</div>
+					<form action="/users" method="PATCH" data-service="postman">
 						<label class="flexbox flex-x-center">
 							<input type="checkbox" name="postmanEnabled" id="postman-enable" {% if user.postmanEnabled %}checked {% endif %}>
 							<span>Enabled</span>
@@ -219,7 +250,14 @@
 						<i class="fa fa-check-circle success-icon" data-for="statuscake"></i>
 						<div class="errorlist" data-for="statuscake"></div>
 					</div>
-					<form action="/prod/users" method="PATCH" data-service="statuscake">
+					<div class="instructions">
+						<div>Instructions</div>
+						<div class="text hidden">
+							Go to 'User Details' on the main menu and take note of your Username, and then select 'API Keys' to find your API key.
+							Click on 'Tests' to see a list of tests, then view the Details for the test you want to use; the Test ID can be found in the URL under the ‘tid’ parameter.
+						</div>
+					</div>
+					<form action="/users" method="PATCH" data-service="statuscake">
 						<label class="flexbox flex-x-center">
 							<input type="checkbox" name="statuscakeEnabled" id="statuscake-enable" {% if user.statuscakeEnabled %}checked {% endif %}>
 							<span>Enabled</span>
@@ -237,7 +275,7 @@
 				</div>
 
 				<div class="logout">
-					<a href="/prod/logout"><button><i class="fa fa-sign-out"></i> <span>Log out</span></button></a>
+					<a href="/logout"><button><i class="fa fa-sign-out"></i> <span>Log out</span></button></a>
 				</div>
 
 				<div class="delete">
@@ -247,8 +285,8 @@
 				<h3>Sign up or log in below.</h3>
 
 				<div class="logins flexbox flex-column flex-x-center">
-					<a href="/prod/login?service=google"><button><i class="fa fa-google"></i> <span>Log In with Google</span></button></a>
-					<a href="/prod/signup?service=google"><button><i class="fa fa-google"></i> <span>Sign Up with Google</span></button></a>
+					<a href="/login?service=google"><button><i class="fa fa-google"></i> <span>Log In with Google</span></button></a>
+					<a href="/signup?service=google"><button><i class="fa fa-google"></i> <span>Sign Up with Google</span></button></a>
 				</div>
 			{% endif %}
 		</div>

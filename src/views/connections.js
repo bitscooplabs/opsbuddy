@@ -114,9 +114,12 @@ function del(event, context, callback) {
 				logging: false
 			});
 
-			users = new Users(sequelize);
+			return require('../models/sql/users')(sequelize)
+				.then(function(model) {
+					users = model;
 
-			return Promise.resolve();
+					return Promise.resolve();
+				});
 		})
 		.then(function() {
 			let cookies = _.get(event, 'headers.Cookie', '');
