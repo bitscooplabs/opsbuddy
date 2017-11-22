@@ -62,49 +62,65 @@ a {
 	background-color: @highlight-background;
 }
 
-.header {
+img {
+	width: 400px;
+
 	@media @mobile, @maxwidth768 {
-		font-size: 30px;
+		width: 90%;
+	}
+}
+
+.header {
+	.text-center {
+		text-align: center;
 	}
 
-	h1 {
-		margin-top: 1em;
-	}
+	input[type="text"] {
+		width: 200px;
 
-	h3 {
-		margin-top: 0.5em;
-	}
-
-	.instructions {
-		margin-bottom: 0.5em;
-		max-width: 600px;
-	}
-
-	.logout {
-		width: 600px;
-		margin: 1em 0 0 0;
-	}
-
-	.delete {
-		width: 600px;
-		margin: 1em 0;
+		@media @mobile, @maxwidth768 {
+			width: 100%;
+		}
 	}
 
 	button {
 		width: 200px;
 
 		@media @mobile, @maxwidth768 {
-			width: 400px;
+			width: 100%;
+		}
+
+		&.google-create,
+		&.google-delete {
+			color: white;
+			margin: 1em auto 0 auto;
 		}
 
 		&.google-create {
 			background-color: #6CC644;
-			color: white;
 		}
 
 		&.google-delete {
 			background-color: #BD2C00;
-			color: white;
+		}
+	}
+
+	& > div {
+		margin-top: 1em;
+		width: 600px;
+
+		@media @mobile, @maxwidth768 {
+			width: 90%;
+		}
+
+		&.logout,
+		&.delete {
+			width: auto;
+			margin: 1em 0 0 0;
+
+			@media @mobile, @maxwidth768 {
+				width: 90%;
+			}
 		}
 	}
 }
@@ -115,23 +131,29 @@ a {
 }
 
 div.service {
-	margin-top: 1em;
-	width: 600px;
+	margin-top: 2em;
 
 	form {
+		.flexbox;
+		.flex-column;
+		.flex-x-center;
+
 		button[type="submit"] {
-			margin: 0.3em 0;
+			margin: 1em 0 0 0;
 		}
-	}
 
-	.instructions {
-		cursor: pointer;
-		margin-top: 0.5em;
+		& > label {
+			width: 200px;
 
-		& > :first-child {
-			font-size: 1.1em;
-			font-weight: bold;
-			margin-bottom: 0.2em;
+			@media @mobile, @maxwidth768 {
+				width: 100%;
+			}
+		}
+
+		@media @mobile, @maxwidth768 {
+			& > * {
+				width: 100%;
+			}
 		}
 	}
 }
@@ -140,4 +162,8 @@ div.service {
 	button {
 		margin-bottom: 1em;
 	}
+}
+
+footer {
+	margin: 1em auto;
 }

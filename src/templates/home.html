@@ -2,6 +2,12 @@
 <html lang="en-US">
 	<head>
 		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+
+		<link rel="shortcut icon" href="https://assets.bitscoop.com/1457056861/images/icons/favicon.ico" />
+		<link rel="icon" type="image/png" href="https://assets.bitscoop.com/1457056861/images/icons/favicon-32x32.png" sizes="32x32" />
+		<link rel="icon" type="image/png" href="https://assets.bitscoop.com/1457056861/images/icons/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/png" href="https://assets.bitscoop.com/1457056861/images/icons/favicon-16x16.png" sizes="16x16" />
 
 		<title>Alexa Ops Buddy &middot; powered by BitScoop</title>
 
@@ -112,94 +118,69 @@
 						console.log(data);
 					});
 				});
-
-				$(document).on('click', 'div.instructions', function(e) {
-					var $this = $(this);
-
-					$this.find('.text').toggleClass('hidden');
-				});
 			});
 		</script>
 	</head>
 
 	<body>
 		<div class="header flexbox flex-column flex-x-center">
-			<h1>BitScoop Ops Buddy</h1>
+			<img src="https://s3.amazonaws.com/***INSERT S3 BUCKET NAME HERE***/images/opsbuddy-logo.png" />
 
-			<div class="instructions">
-				This demo allows you to ask a related Alexa skill to get information about your software stack from GitHub, Google Analytics, Postman, and/or StatusCake.
+			<div class="bold text-center">
+				The Alexa Ops Buddy Skill gets you easy answers to your most critical Dev Ops questions.
+			</div>
+
+			<div class="bold text-center">
+				Get information about your software stack from GitHub, Google Analytics, Postman, and/or Statuscake.
 			</div>
 
 			{% if user %}
-				<div class="instructions">
-					Now that you're signed in, you should enable and configure the services from which you want to retrieve data.
-					Click on 'Instructions' under each service for more information on where to find configuration information.
-				</div>
-			{% else %}
-				<div class="instructions">
-					You must first sign up for an account here using a Google account, and once signed in enable and configure the services from which you want to retrieve data.
-				</div>
-			{% endif %}
-
-			<div class="instructions">
-				You will then need to install the Alexa skill 'BitScoop Ops Buddy' and link it with the same Google account you used to sign up for your Ops Buddy account.
-				After that, you will be able to ask Alexa 'Ask OpsBuddy how the stack is doing', and it will retrieve the requested data and read it back to you.
-			</div>
-
-			{% if user %}
-				<div class="github service flexbox flex-column">
+				<div class="bold text-center">'Alexa, ask Ops Buddy how the stack is doing.'</div>
+				<div class="github service flexbox flex-column flex-x-center">
 					<div class="title">
 						GitHub
 						<i class="fa fa-check-circle success-icon" data-for="github"></i>
 						<div class="errorlist" data-for="github"></div>
 					</div>
-					<div class="instructions">
-						Instructions
-						<div class="text hidden">
-							Enter the name of a public GitHub repo as well as the name of the owner.
-						</div>
-					</div>
+					<ol>
+						<li>Enter the name of a public GitHub repository.</li>
+						<li>Enter the username of that repository's owner.</li>
+					</ol>
 					<form action="/users" method="PATCH" data-service="github">
 						<label class="flexbox flex-x-center">
 							<input type="checkbox" name="githubEnabled" id="github-enable" {% if user.githubEnabled %}checked {% endif %}>
 							<span>Enabled</span>
 						</label>
 						<div>
-							<div>Repo's Name</div>
+							<div>GitHub Repo Name</div>
 							<input type="text" name="githubRepo" placeholder="Repo's name" value="{{ user.githubRepo }}">
 						</div>
 						<div>
-							<div>Repo Owner's Name</div>
+							<div>GitHub Repo Owner Name</div>
 							<input type="text" name="githubUser" placeholder="Repo owner's name" value="{{ user.githubUser }}">
 						</div>
 						<button type="submit">Update GitHub</button>
 					</form>
 				</div>
 
-				<div class="google service flexbox flex-column">
+				<div class="google service flexbox flex-column flex-x-center">
 					<div class="title">
 						Google Analytics
 						<i class="fa fa-check-circle success-icon" data-for="google"></i>
 						<div class="errorlist" data-for="google"></div>
 					</div>
-					<div class="instructions">
-						<div>Instructions</div>
-						<div class="text hidden">
-							When signed into a Google account, go to the <a target="_blank" href="https://console.developers.google.com/apis/api/analytics.googleapis.com/overview">Google API Console for Analytics</a> and make sure Analytics is enabled.
-							Next go to <a target="_blank" href="https://analytics.google.com/analytics/web/#management/Settings/">Google Analytics Settings</a>, then select the View you want to use in the right-hand column and then ‘View Settings’ underneath that.
-							Under Basic Settings you should see the View ID; it should look like ga:123456789.
-
-							You must also click the button 'Create Google Connection' and follow the prompts that come up to give Ops Buddy permission to use Google Analytics on your behalf.
-							The Google account you use to create this Connection must have permission to read your Anaytics data.
-						</div>
-					</div>
+					<ol>
+						<li>Go to the <a target="_blank" href="https://console.developers.google.com/apis/api/analytics.googleapis.com/overview">Google API Console for Analytics</a> and make sure Analytics is enabled.</li>
+						<li>Go to <a target="_blank" href="https://analytics.google.com/analytics/web/#management/Settings/">Google Analytics Settings</a>, then select the View you want to use in the right-hand column and then ‘View Settings’ underneath that. Under Basic Settings you should see the View ID; it should look like ga:123456789.</li>
+						<li>Click the button 'Create Google Connection' below and follow the prompts that come up to give Ops Buddy permission to use Google Analytics on your behalf. The Google account you use to create this Connection must have permission to read your Analytics data.</li>
+					</ol>
 					<form action="/users" method="PATCH" data-service="google">
 						<label class="flexbox flex-x-center">
 							<input type="checkbox" name="googleEnabled" id="google-enable" {% if user.googleEnabled %}checked {% endif %}>
 							<span>Enabled</span>
 						</label>
 						<div>
-							<div>View ID</div>
+							<div>GA View ID</div>
 							<input type="text" name="googleViewId" placeholder="View ID" value="{{ user.googleViewId }}">
 						</div>
 						<button type="submit">Update Google</button>
@@ -208,27 +189,23 @@
 					{% if user.googleAnalyticsConnectionId %}
 						<button class="google-delete">Delete Google Connection</button>
 					{% else %}
-					<a href="/connections">
-						<button class="google-create">Create Google Connection</button>
-					</a>
+						<a href="/connections">
+							<button class="google-create">Create Google Connection</button>
+						</a>
 					{% endif %}
 				</div>
 
-				<div class="postman service flexbox flex-column">
+				<div class="postman service flexbox flex-column flex-x-center">
 					<div class="title">
 						Postman
 						<i class="fa fa-check-circle success-icon" data-for="postman"></i>
 						<div class="errorlist" data-for="postman"></div>
 					</div>
-					<div class="instructions">
-						<div>Instructions</div>
-						<div class="text hidden">
-							In Postman, create a Monitor for an API you wish to test, then click on the Monitor.
-							The Monitor’s ID should be the last thing in the URL path, e.g. https://[appname].postman.co/monitors/[monitor_id].
-
-							Go to 'Integrations' on the main menu, select 'Postman Pro API', and then either create a new key or use an existing one.
-						</div>
-					</div>
+					<ol>
+						<li><a target="_blank" href="https://www.getpostman.com/docs/postman/monitors/intro_monitors">Create a Postman Monitor</a> for an API you wish to test, then click on the Monitor.</li>
+						<li>The Monitor’s ID should be the last thing in the URL path, e.g. https://[appname].postman.co/monitors/[Monitor ID]</li>
+						<li>Go to 'Integrations' on the main menu, select 'Postman API', and then either create a new key or use an existing one.</li>
+					</ol>
 					<form action="/users" method="PATCH" data-service="postman">
 						<label class="flexbox flex-x-center">
 							<input type="checkbox" name="postmanEnabled" id="postman-enable" {% if user.postmanEnabled %}checked {% endif %}>
@@ -244,19 +221,17 @@
 					</form>
 				</div>
 
-				<div class="statuscake service flexbox flex-column">
+				<div class="statuscake service flexbox flex-column flex-x-center">
 					<div class="title">
 						StatusCake
 						<i class="fa fa-check-circle success-icon" data-for="statuscake"></i>
 						<div class="errorlist" data-for="statuscake"></div>
 					</div>
-					<div class="instructions">
-						<div>Instructions</div>
-						<div class="text hidden">
-							Go to 'User Details' on the main menu and take note of your Username, and then select 'API Keys' to find your API key.
-							Click on 'Tests' to see a list of tests, then view the Details for the test you want to use; the Test ID can be found in the URL under the ‘tid’ parameter.
-						</div>
-					</div>
+					<ol>
+						<li>Go to <a target="_blank" href="https://app.statuscake.com/User.php">User Details</a> and take note of your Username.</li>
+						<li>Go to <a target="_blank" href="https://app.statuscake.com/APIKey.php">API Key</a> to get your API Key</li>
+						<li>Go to <a target="_blank" href="https://app.statuscake.com/YourStatus.php">Tests</a> to see the tests you have set up. Create a new test if there are none, and click on the Details of the test you want to use. The Test ID can be found in the URL as the 'tid' parameter, e.g. https://app.statuscake.com/AllStatus.php?tid=[Test ID]</li>
+					</ol>
 					<form action="/users" method="PATCH" data-service="statuscake">
 						<label class="flexbox flex-x-center">
 							<input type="checkbox" name="statuscakeEnabled" id="statuscake-enable" {% if user.statuscakeEnabled %}checked {% endif %}>
@@ -281,14 +256,29 @@
 				<div class="delete">
 					<button><i class="fa fa-trash"></i> <span>Delete account</span></button>
 				</div>
-			{% else %}
-				<h3>Sign up or log in below.</h3>
 
+				<div class="flexbox flex-column flex-x-center">
+					<div class="bold">Want to add an integration to Ops Buddy? It's easy.</div>
+
+					<a target="_blank" href="https://github.com/bitscooplabs/opsbuddy">Contribute to our open source project on GitHub.</a>
+
+					<div class="bold">This app was built on the BitScoop platform.</div>
+
+					<a target="_blank" href="https://bitscoop.com">Learn better ways to create and maintain integrations.</a>
+				</div>
+			{% else %}
 				<div class="logins flexbox flex-column flex-x-center">
 					<a href="/login?service=google"><button><i class="fa fa-google"></i> <span>Log In with Google</span></button></a>
 					<a href="/signup?service=google"><button><i class="fa fa-google"></i> <span>Sign Up with Google</span></button></a>
 				</div>
+
+				<div class="bold">
+					Install the Alexa skill 'BitScoop Ops Buddy' and link it with the same Google account you used to sign up for your Ops Buddy account.
+				</div>
 			{% endif %}
 		</div>
 	</body>
+	<footer>
+		<div class="copyright">&copy; 2017 BitScoop Labs, Inc.</div>
+	</footer>
 </html>
