@@ -19,7 +19,7 @@ Just click on the 'Add to BitScoop' button next to each one.
 | StatusCake Health Alerts | statuscake.json | [![Add to BitScoop](https://assets.bitscoop.com/github/AddBitScoopXSmall.png)](https://bitscoop.com/maps/create?source=https://raw.githubusercontent.com/bitscooplabs/bitscoop-ops-buddy/master/fixtures/maps/statuscake.json) |
 | GitHub Issues | github.json | [![Add to BitScoop](https://assets.bitscoop.com/github/AddBitScoopXSmall.png)](https://bitscoop.com/maps/create?source=https://raw.githubusercontent.com/bitscooplabs/bitscoop-ops-buddy/master/fixtures/maps/github.json) |
 
-Upon click each button, you will be redirected to BitScoop and will see the JSON for the map you just added.
+Upon clicking each button, you will be redirected to BitScoop and will see the JSON for the map you just added.
 Click the ‘+ Create’ button in the upper right-hand corner to save the map.
 Make sure to add all five maps.
 
